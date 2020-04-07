@@ -3,9 +3,11 @@ import java.util.Scanner;
 
 public class Game {
     private int numPlayers;
-    private ArrayList<Player>players=new ArrayList<>();
-    private ArrayList<Card> cards=new ArrayList<>();
-
+    private ArrayList<Player> players = new ArrayList<>();
+    private ArrayList<Card> cards = new ArrayList<>();
+    private Card card;
+    private int changer=1;
+    private int turn=0;
     public Game(int numPlayers) {
         this.numPlayers = numPlayers;
     }
@@ -22,127 +24,130 @@ public class Game {
         return cards;
     }
 
-    public void print(){
+    public void print() {
 
     }
-    public void start(){
-        for(int i=0;i<13;i++){
-            Card card1=new Card("green",i);
+
+    public void start() {
+        for (int i = 0; i < 13; i++) {
+            Card card1 = new Card("green", i);
             cards.add(card1);
-            Card card2=new Card("red",i);
+            Card card2 = new Card("red", i);
             cards.add(card2);
-            Card card3=new Card("blue",i);
+            Card card3 = new Card("blue", i);
             cards.add(card3);
-            Card card4=new Card("yellow",i);
+            Card card4 = new Card("yellow", i);
             cards.add(card4);
         }
-        for(int i=1;i<13;i++){
-            Card card1=new Card("green",i);
+        for (int i = 1; i < 13; i++) {
+            Card card1 = new Card("green", i);
             cards.add(card1);
-            Card card2=new Card("red",i);
+            Card card2 = new Card("red", i);
             cards.add(card2);
-            Card card3=new Card("blue",i);
+            Card card3 = new Card("blue", i);
             cards.add(card3);
-            Card card4=new Card("yellow",i);
+            Card card4 = new Card("yellow", i);
             cards.add(card4);
         }
-        for(int i=0;i<4;i++){
-            Card card1=new Card("black",13);
+        for (int i = 0; i < 4; i++) {
+            Card card1 = new Card("black", 13);
             cards.add(card1);
-            Card card2=new Card("black",14);
+            Card card2 = new Card("black", 14);
             cards.add(card2);
         }
-        for(int i=0;i<numPlayers;i++){
-            Player player=new Player();
-            for(int j=0;j<7;j++){
-                int rand=(int) (Math.random()*cards.size());
+        for (int i = 0; i < numPlayers; i++) {
+            Player player = new Player();
+            for (int j = 0; j < 7; j++) {
+                int rand = (int) (Math.random() * cards.size());
                 player.addCard(cards.get(rand));
                 cards.remove(rand);
             }
             players.add(player);
         }
-        Scanner sc=new Scanner(System.in);
-        int j=1;
-        for(Player i:players){
-            System.out.print("Player "+j+"name:");
+        Scanner sc = new Scanner(System.in);
+        int j = 1;
+        for (Player i : players) {
+            System.out.print("Player " + j + " name:");
             i.setName(sc.next());
             j++;
         }
+        int rand = (int) (Math.random() * (cards.size() - 1));
+        card = cards.get(rand);
+        cards.remove(rand);
     }
-    public boolean endGame(){
-        for(Player i:players){
-            if(i.numCard()==0)return true;
+    public boolean endGame() {
+        for (Player i : players) {
+            if (i.numCard() == 0) return true;
         }
         return false;
     }
-    public void reverse(int turn,int changer,Card card){
-        players.get(Math.abs(turn)%numPlayers).removeCard(card);
-        changer=changer*-1;
+    public boolean rightChoose(Card choose) {
+        if (card.getNumber() == choose.getNumber()) return true;
+        else if (card.getColor().equals(choose.getColor())) return true;
+        else return choose.getColor().equals("black");
     }
-    public void skip(int turn,Card card){
-        players.get(Math.abs(turn)%numPlayers).removeCard(card);
-        turn++;
-    }
-    public void plus2(int turn,Card card){
-        players.get(Math.abs(turn)%numPlayers).removeCard(card);
-        for(int j=0;j<2;j++){
-            int rand1=(int) (Math.random()*(cards.size()-1));
-            players.get(Math.abs(turn+1)%numPlayers).addCard(cards.get(rand1));
-            cards.remove(rand1);
+    public void applyTurn(Card choose){
+        card=choose;
+        players.get(turn).removeCard(choose);
+        if(choose.getNumber()==10)turn=turn+changer;
+        if(choose.getNumber()==11)changer=changer*-1;
+        if(choose.getNumber()==12){
+            for(int i=0;i<2;i++){
+                int rand = (int) (Math.random() * (cards.size() - 1));
+                players.get(turn+changer).addCard(cards.get(rand));
+                cards.remove(rand);
+            }
+        }
+        if(choose.getNumber()==13){
+            for(int i=0;i<4;i++){
+                int rand = (int) (Math.random() * (cards.size() - 1));
+                players.get(turn+changer).addCard(cards.get(rand));
+                cards.remove(rand);
+            }
+            System.out.println("Choose your color:");
+            Scanner sc=new Scanner(System.in);
+            String color=sc.next();
+            card=new Card(color,13);
+        }
+        if(choose.getNumber()==14){
+            System.out.println("Choose your color:");
+            Scanner sc=new Scanner(System.in);
+            String color=sc.next();
+            card=new Card(color,14);
         }
     }
-    public String plus4(int turn,Card card){
-        players.get(Math.abs(turn)%numPlayers).removeCard(card);
-        for(int j=0;j<4;j++){
-            int rand1=(int) (Math.random()*(cards.size()-1));
-            players.get(Math.abs(turn+1)%numPlayers).addCard(cards.get(rand1));
-            cards.remove(rand1);
-        }
-        Scanner sc=new Scanner(System.in);
-        System.out.println("Choose your color");
-        return sc.next();
-    }
-    public String changeColor(int turn,Card card){
-        players.get(Math.abs(turn)%numPlayers).removeCard(card);
-        Scanner sc=new Scanner(System.in);
-        System.out.println("Choose your color");
-        return sc.next();
-    }
-    public void game(){
+    public void game() {
         start();
-        int turn=0;
-        int changer=1;
-        int rand=(int) (Math.random()*(cards.size()-1));
-        cards.remove(rand);
-        Card card=cards.get(rand);
-        while (!endGame()){
+        while (!endGame()) {
             card.print();
-            players.get(Math.abs(turn%numPlayers)).print();
-            if(!players.get(Math.abs(turn%numPlayers)).availableCard(card)) {
+
+            if(turn<0)turn=turn+numPlayers;
+            if(turn>=numPlayers)turn=turn-numPlayers;
+
+            players.get(turn % numPlayers).print();
+
+            if (!players.get(turn).availableCard(card)) {
                 System.out.println("You don't have any cards to choose it we will get you a card Are you ok?(1.Yes 2.No)");
                 Scanner sc = new Scanner(System.in);
-                sc.nextInt();
-                rand = (int) (Math.random() * (cards.size() - 1));
+                sc.next();
+
+               int rand = (int) (Math.random() * (cards.size() - 1));
                 cards.remove(rand);
-                players.get(Math.abs(turn%numPlayers)).addCard(cards.get(rand));
+                players.get(turn).addCard(cards.get(rand));
+                players.get(turn).print();
             }
-            if(players.get(Math.abs(turn%numPlayers)).availableCard(card)){
+            if (players.get(turn).availableCard(card)) {
                 System.out.print("Your choose:");
-                Scanner sc=new Scanner(System.in);
-                int choose=sc.nextInt()-1;
-                card=players.get(Math.abs(turn%numPlayers)).getCards().get(choose);
-                if(players.get(Math.abs(turn%numPlayers)).getCards().get(choose).getNumber()==10)skip(turn,players.get(Math.abs(turn%numPlayers)).getCards().get(choose));
-                else if(players.get(Math.abs(turn%numPlayers)).getCards().get(choose).getNumber()==11)reverse(turn,changer,players.get(Math.abs(turn%numPlayers)).getCards().get(choose));
-                else if(players.get(Math.abs(turn%numPlayers)).getCards().get(choose).getNumber()==12)plus2(turn,players.get(Math.abs(turn%numPlayers)).getCards().get(choose));
-                else if(players.get(Math.abs(turn%numPlayers)).getCards().get(choose).getNumber()==13){
-                    card=new Card(plus4(turn,players.get(Math.abs(turn%numPlayers)).getCards().get(choose)),13);
+                Scanner sc = new Scanner(System.in);
+                int choose = sc.nextInt() - 1;
+                while(!rightChoose(players.get(turn).getCards().get(choose))){
+                    System.out.print("Your last choose is wrong please choose right card:");
+                    sc = new Scanner(System.in);
+                    choose = sc.nextInt() - 1;
                 }
-                else if(players.get(Math.abs(turn%numPlayers)).getCards().get(choose).getNumber()==14){
-                    String color=changeColor(turn,players.get(Math.abs(turn%numPlayers)).getCards().get(choose));
-                    card=new Card(color,14);
-                }
+                applyTurn(players.get(turn).getCards().get(choose));
             }
-            turn=turn+changer;
+            turn = turn + changer;
         }
     }
 }
