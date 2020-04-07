@@ -46,6 +46,7 @@ public class Player {
      * @param card Card
      */
     public void removeCard(Card card) {
+
         cards.remove(card);
     }
 
