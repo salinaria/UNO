@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Card {
     //green red blue yellow black
     private String color;
@@ -60,6 +62,5 @@ public class Card {
         else if(number==14) System.out.print("C O L O R");
         System.out.println("|\n|         |\n###########");
     }
-
 }
 
