@@ -48,11 +48,23 @@ public class Card {
         String ANSI_RED = "\u001B[31m";
         String ANSI_YELLOW = "\u001B[33m";
         String ANSI_BLACK = "\u001B[30m";
-        if (color.equals("blue")) System.out.print(ANSI_BLUE);
-        else if (color.equals("green")) System.out.print(ANSI_GREEN);
-        else if (color.equals("red")) System.out.print(ANSI_RED);
-        else if (color.equals("yellow")) System.out.print(ANSI_YELLOW);
-        else System.out.print(ANSI_BLACK);
+        switch (color) {
+            case "blue":
+                System.out.print(ANSI_BLUE);
+                break;
+            case "green":
+                System.out.print(ANSI_GREEN);
+                break;
+            case "red":
+                System.out.print(ANSI_RED);
+                break;
+            case "yellow":
+                System.out.print(ANSI_YELLOW);
+                break;
+            default:
+                System.out.print(ANSI_BLACK);
+                break;
+        }
         System.out.print("###########\n|         |\n|");
         if(number<10) System.out.print("    "+number+"    ");
         else if(number==10) System.out.print(" S K I P ");
@@ -61,6 +73,8 @@ public class Card {
         else if(number==13) System.out.print("   + 4   ");
         else if(number==14) System.out.print("C O L O R");
         System.out.println("|\n|         |\n###########");
+        String ANSI_RESET = "\u001B[0m";
+        System.out.println(ANSI_RESET);
     }
 }
 

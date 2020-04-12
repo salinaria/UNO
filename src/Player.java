@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Player {
     private String name;
-    private ArrayList<Card> cards = new ArrayList<>();
+    protected Deck deck=new Deck();
 
     /**
      * Getter for name
@@ -22,62 +22,29 @@ public class Player {
     }
 
     /**
-     * Getter for cards
+     * Getter for deck
      *
-     * @return An array of cards
+     * @return deck
      */
-
-    public ArrayList<Card> getCards() {
-        return cards;
+    public Deck getDeck() {
+        return deck;
     }
-
-    /**
-     * Add a card to player
-     *
-     * @param card Card
-     */
-    public void addCard(Card card) {
-        cards.add(card);
+    public void addCard(Card card){
+        deck.addCard(card);
     }
-
-    /**
-     * Remove a card from player
-     *
-     * @param card Card
-     */
-    public void removeCard(Card card) {
-
-        cards.remove(card);
+    public void removeCard(Card card){
+        deck.removeCard(card);
     }
-
-    /**
-     * Return number of player's cards
-     *
-     * @return An integer
-     */
-    public int numCard() {
-        return cards.size();
+    public int numCard(){
+        return deck.size();
     }
-
-
     public boolean availableCard(Card card){
-        for(Card i:cards){
-            if(i.getColor().equals("black"))return true;
-            else if(i.getColor().equals(card.getColor()))return true;
-            else if(i.getNumber()==card.getNumber())return true;
-        }
-        return false;
+        return deck.availableCard(card);
     }
     public boolean havePlus2(){
-        for(Card i:cards){
-            if(i.getNumber()==12)return true;
-        }
-        return false;
+        return deck.havePlus2();
     }
     public boolean havePlus4(){
-        for(Card i:cards){
-            if(i.getNumber()==13)return true;
-        }
-        return false;
+        return deck.havePlus4();
     }
 }
