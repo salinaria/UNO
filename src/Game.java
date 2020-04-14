@@ -123,7 +123,6 @@ public class Game {
             int turner=1;
             while(players.get((turn+changer+numPlayers)%numPlayers).havePlus2()){
                 if(players.get((turn+changer+numPlayers)%numPlayers) instanceof RealPlayer){
-                    print();
                     pile.print();
                     turn=(turn+changer+numPlayers)%numPlayers;
                     print();
@@ -136,6 +135,7 @@ public class Game {
                         pile.print();
                         applyTurn(players.get((turn+changer+numPlayers)%numPlayers).getDeck().get(choice));
                         players.get((turn+changer+numPlayers)%numPlayers).getDeck().remove(choice);
+                        turn=(turn+changer+numPlayers)%numPlayers;
                         break;
                     }
                     else{
@@ -164,6 +164,7 @@ public class Game {
                 players.get((turn+changer+numPlayers)%numPlayers).addCard(cards.get(rand));
                 cards.remove(rand);
             }
+            pile.print();
         }
         else if (choose.getNumber() == 13) {
             players.get(turn).removeCard(new Card("black",13));
@@ -197,7 +198,6 @@ public class Game {
                         pile=new Card(color,13);
                         players.get((turn+changer+numPlayers)%numPlayers).getDeck().remove(choice);
                         turn=(turn+changer+numPlayers)%numPlayers;
-                        print();
                         pile.print();
                         turner++;
                     }

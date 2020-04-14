@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Card {
     //green red blue yellow black
@@ -24,6 +25,14 @@ public class Card {
         this.number = number;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Card card = (Card) o;
+        return number == card.number &&
+                Objects.equals(color, card.color);
+    }
     /**
      * Getter for color
      *
@@ -65,14 +74,14 @@ public class Card {
                 System.out.print(ANSI_BLACK);
                 break;
         }
-        System.out.print("###########\n|         |\n|");
+        System.out.print("                                          ###########\n                                          |         |\n                                          |");
         if(number<10) System.out.print("    "+number+"    ");
         else if(number==10) System.out.print(" S K I P ");
         else if(number==11) System.out.print("  R E V  ");
         else if(number==12) System.out.print("   + 2   ");
         else if(number==13) System.out.print("   + 4   ");
         else if(number==14) System.out.print("C O L O R");
-        System.out.println("|\n|         |\n###########");
+        System.out.println("|\n                                          |         |\n                                          ###########");
         String ANSI_RESET = "\u001B[0m";
         System.out.println(ANSI_RESET);
     }
